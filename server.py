@@ -40,7 +40,7 @@ net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
 
 # initialize the consider set (class labels we care about and want
 # to count), the object count dictionary, and the frame  dictionary
-CONSIDER = set(["dog", "person", "car"])
+CONSIDER = set(["cat", "person"])
 objCount = {obj: 0 for obj in CONSIDER}
 frameDict = {}
 
@@ -53,7 +53,7 @@ lastActiveCheck = datetime.now()
 # stores the estimated number of Pis, active checking period, and
 # calculates the duration seconds to wait before making a check to
 # see if a device was active
-ESTIMATED_NUM_PIS = 4
+ESTIMATED_NUM_PIS = 1
 ACTIVE_CHECK_PERIOD = 10
 ACTIVE_CHECK_SECONDS = ESTIMATED_NUM_PIS * ACTIVE_CHECK_PERIOD
 
