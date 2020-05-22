@@ -23,7 +23,7 @@ sender = imagezmq.ImageSender(connect_to="tcp://{}:5555".format(
 # camera sensor to warmup
 rpiName = socket.gethostname()
 #vs = VideoStream(usePiCamera=True).start()
-vs = VideoStream(src=0).start()
+vs = VideoStream(src=0, resolution=(1280, 720)).start()
 time.sleep(2.0)
  
 while True:
