@@ -147,7 +147,7 @@ while True:
 				objCount[CLASSES[idx]] += 1
 
 				# If the detected object was a cat then send a text
-				if CLASSES[idx] == "cat" and ((int(time.time()) - MESSAGE_SENT) > 120):
+				if CLASSES[idx] == "cat" and ((int(time.time()) - MESSAGE_SENT) > 30):
 					message_notifier = "Milo is waiting at the backdoor, please let him in!"
 					for number in NUMBERS:
 						send_text(number, message_notifier)
