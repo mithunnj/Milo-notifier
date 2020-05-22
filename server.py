@@ -37,7 +37,7 @@ NUMBERS = [
 	"+16138831156",
 	"+16139791159"
 ]
-MESSAGE_SENT = None
+MESSAGE_SENT = 0 # Set start time of message to 0  since program intializes without a message sent.
 
 # Twilio API call to send text message
 def send_text(number, message):
@@ -147,9 +147,8 @@ while True:
 				objCount[CLASSES[idx]] += 1
 
 				# If the detected object was a cat then send a text
-				if CLASSES[idx] == "cat" and (not MESSAGE_SENT or (int(time.time) - MESSAGE_SENT) < 120):
-					#message_notifier: "Milo is waiting at the backdoor, please let him in!"
-					message_notifier: "This is a test."
+				if CLASSES[idx] == "cat" and ((int(time.time()) - MESSAGE_SENT) > 120):
+					message_notifier = "Milo is waiting at the backdoor, please let him in!"
 					for number in NUMBERS:
 						send_text(number, message_notifier)
 					MESSAGE_SENT = int(time.time())
