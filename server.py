@@ -9,6 +9,9 @@ import imagezmq
 import argparse
 import imutils
 import cv2
+from twilio.rest import Client
+import os
+import time
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -23,6 +26,34 @@ ap.add_argument("-mW", "--montageW", required=True, type=int,
 ap.add_argument("-mH", "--montageH", required=True, type=int,
 	help="montage frame height")
 args = vars(ap.parse_args())
+
+# Fetch Twilio API credentials
+ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID')
+AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN')
+HOST_NUMBER = os.environ.get('TWILIO_NUMBER')
+NUMBERS = [
+	"+16138831157",
+	"+16137691157",
+	"+16138831156",
+	"+16139791159"
+]
+MESSAGE_SENT = None
+
+# Twilio API call to send text message
+def send_text(number, message):
+	"""
+	param: number <str> : This is the outbound verified Twilio number that the message will be sent to.
+	param: message <str> : This is the message to send to the Twilio number from above.
+	"""
+	client = Client(ACCOUNT_SID, AUTH_TOKEN)
+	message = client.messages \
+                .create(
+                     body=message,
+                     from_=HOST_NUMBER,
+                     to=number
+                 )
+
+	return
 
 # initialize the ImageHub object
 imageHub = imagezmq.ImageHub()
@@ -114,6 +145,14 @@ while True:
 				# increment the count of the particular object
 				# detected in the frame
 				objCount[CLASSES[idx]] += 1
+
+				# If the detected object was a cat then send a text
+				if CLASSES[idx] == "cat" and (not MESSAGE_SENT or (int(time.time) - MESSAGE_SENT) < 120):
+					#message_notifier: "Milo is waiting at the backdoor, please let him in!"
+					message_notifier: "This is a test."
+					for number in NUMBERS:
+						send_text(number, message_notifier)
+					MESSAGE_SENT = int(time.time())
 
 				# compute the (x, y)-coordinates of the bounding box
 				# for the object
